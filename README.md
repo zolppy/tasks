@@ -1,64 +1,64 @@
-## Lista de Tarefas 
+# Lista de Tarefas (To-Do List)
 
-**Descrição:**
+Uma aplicação web simples, moderna e responsiva para gerenciamento de tarefas. Permite adicionar, editar, excluir e filtrar tarefas, com persistência de dados no navegador usando `localStorage`.
 
-Este projeto é um aplicativo simples de lista de tarefas que permite gerenciar suas tarefas e atividades de forma eficiente. 
+## ✨ Funcionalidades
 
-**Funcionalidades:**
+- **Adicionar Tarefas**: Crie novas tarefas com descrição, tag (categoria) e data de vencimento.
+- **Editar Tarefas**: Modifique o texto de uma tarefa existente.
+- **Excluir Tarefas**: Remova tarefas da lista.
+- **Marcar como Concluída**: Alterne o status de uma tarefa entre pendente e concluída.
+- **Filtragem Avançada**:
+  - Filtre por status (Todas, Pendentes, Concluídas).
+  - Filtre por tag (Geral, Trabalho, Educação).
+  - Filtre por data de vencimento.
+- **Persistência de Dados**: Suas tarefas são salvas no `localStorage` do navegador, então elas não desaparecem ao recarregar a página.
+- **Design Responsivo**: A interface se adapta a diferentes tamanhos de tela, de desktops a dispositivos móveis.
+- **Modo Escuro (Dark Mode)**: Suporte a tema claro e escuro para maior conforto visual.
+- **Estado Vazio**: Uma mensagem amigável é exibida quando não há tarefas correspondentes aos filtros aplicados.
 
-* Criar, editar e excluir tarefas
-* Marcar tarefas como concluídas
-* Excluir todas tarefas concluídas
-* Exibir quantidade de tarefas por status (todas, concluídas, em progresso)
+## 🚀 Tecnologias Utilizadas
 
-**Começando:**
+- **HTML5**: Para a estrutura da página.
+- **CSS3**: Para estilização básica.
+- **Tailwind CSS**: Framework CSS para uma estilização rápida e moderna.
+- **JavaScript (ES6+)**: Para toda a lógica da aplicação, manipulação do DOM e interatividade.
+- **Font Awesome**: Para os ícones.
+- **Google Fonts**: Para a tipografia (`Inter`).
 
-1. Clone o repositório para o seu computador:
+## ⚙️ Como Executar o Projeto
+
+Como este é um projeto puramente front-end, não há necessidade de um servidor ou processo de build. Basta seguir os passos abaixo:
+
+1.  **Clone o repositório** (ou baixe os arquivos):
+    ```bash
+    git clone https://github.com/seu-usuario/to-do-list.git
+    ```
+
+2.  **Navegue até o diretório do projeto**:
+    ```bash
+    cd to-do-list
+    ```
+
+3.  **Abra o arquivo `index.html`**:
+    - Você pode simplesmente abrir o arquivo `index.html` diretamente no seu navegador de preferência (Google Chrome, Firefox, etc.).
+
+E pronto! A aplicação estará funcionando localmente no seu navegador.
+
+## 🎨 Estrutura do Projeto
 
 ```
-git clone https://github.com/zolppy/to-do-list.git
+to-do-list/
+├── 📄 index.html       # Estrutura principal da aplicação
+├── 🎨 index.css        # Estilos personalizados adicionais
+├── ⚙️ index.js         # Lógica da aplicação em JavaScript
+└──  favicon.ico      # Ícone da aplicação
 ```
 
-2. Acesse o diretório do repositório:
+## 📄 Licença
 
-```
-cd to-do-list
-```
+Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
 
-3. Abra o projeto com seu navegador favorito:
+---
 
-```
-firefox index.html
-```
-
-**Demo:**
-
-Acesse o projeto em: https://zolppy.github.io/to-do-list/
-
-**Tecnologias utilizadas:**
-
-* HTML5
-* CSS3
-* JavaScript
-* Bootstrap Icons
-* Google Fonts
-
-**Contribuindo:**
-
-Se você deseja contribuir para este projeto, siga estas etapas:
-
-1. Faça um fork do repositório.
-2. Crie uma nova branch para sua modificação.
-3. Faça suas alterações e envie um pull request.
-
-**Licença:**
-
-Este projeto está licenciado sob a licença MIT.
-
-**Agradecimentos:**
-
-* Agradeço a todos que contribuíram para este projeto.
-
-**Contato:**
-
-Se você tiver alguma dúvida ou sugestão, entre em contato comigo através do e-mail: gabriel.lcifba@gmail.com.
+Feito com ❤️ para ajudar na organização do seu dia a dia!

@@ -1,0 +1,16 @@
+body {
+  font-family: "Inter", sans-serif;
+}
+
+.task-item {
+  transition: all 0.3s ease;
+}
+
+.task-item:hover {
+  transform: translateY(-2px);
+}
+
+.completed {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
