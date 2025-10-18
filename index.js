@@ -15,12 +15,22 @@ const filterCompleted = document.getElementById("filterCompleted");
 const filterTag = document.getElementById("filterTag");
 const filterDate = document.getElementById("filterDate");
 
+// Edit Modal Elements
+const editTaskModal = document.getElementById("editTaskModal");
+const editTaskForm = document.getElementById("editTaskForm");
+const editTaskId = document.getElementById("editTaskId");
+const editTaskInput = document.getElementById("editTaskInput");
+const editTaskTag = document.getElementById("editTaskTag");
+const editTaskDueDate = document.getElementById("editTaskDueDate");
+const cancelEdit = document.getElementById("cancelEdit");
+
 // Initialization
 document.addEventListener("DOMContentLoaded", () => {
   // Set minimum date to today in date fields
   const today = new Date().toISOString().split("T")[0];
   taskDueDate.min = today;
   filterDate.min = today;
+  editTaskDueDate.min = today;
 
   renderTasks();
 
@@ -31,6 +41,10 @@ document.addEventListener("DOMContentLoaded", () => {
   filterCompleted.addEventListener("click", () => setFilter("completed"));
   filterTag.addEventListener("change", renderTasks);
   filterDate.addEventListener("change", renderTasks);
+
+  // Edit modal listeners
+  editTaskForm.addEventListener("submit", updateTask);
+  cancelEdit.addEventListener("click", closeModal);
 });
 
 // Add new task
@@ -72,7 +86,8 @@ function renderTasks() {
   // Status filter
   if (currentFilter === "pending") {
     filteredTasks = filteredTasks.filter((task) => !task.completed);
-  } else if (currentFilter === "completed") {
+  }
+  else if (currentFilter === "completed") {
     filteredTasks = filteredTasks.filter((task) => task.completed);
   }
 
@@ -216,52 +231,25 @@ function editTask(e) {
 
   if (!task) return;
 
-  // Show inline form
-  taskElement.innerHTML = `
-    <div class="editing-task p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-      <input type="text" value="${
-        task.text
-      }" class="edit-task-input w-full mb-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200" />
-      <div class="flex gap-4 mb-2">
-        <select class="edit-task-tag w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200">
-          <option value="Geral" ${
-            task.tag === "Geral" ? "selected" : ""
-          }>Geral</option>
-          <option value="Trabalho" ${
-            task.tag === "Trabalho" ? "selected" : ""
-          }>Trabalho</option>
-          <option value="Educação" ${
-            task.tag === "Educação" ? "selected" : ""
-          }>Educação</option>
-        </select>
-        <input type="date" value="${
-          task.dueDate
-        }" class="edit-task-due-date w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200" />
-      </div>
-      <div class="flex justify-end gap-2">
-        <button class="save-edit-task bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium">Salvar</button>
-        <button class="cancel-edit-task bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium">Cancelar</button>
-      </div>
-    </div>
-  `;
-
-  // Add event listeners for save and cancel buttons
-  taskElement
-    .querySelector(".save-edit-task")
-    .addEventListener("click", () => updateTask(taskId, taskElement));
-  taskElement
-    .querySelector(".cancel-edit-task")
-    .addEventListener("click", renderTasks);
+  // Populate and show the modal
+  editTaskId.value = task.id;
+  editTaskInput.value = task.text;
+  editTaskTag.value = task.tag;
+  editTaskDueDate.value = task.dueDate;
+  editTaskModal.classList.remove("hidden");
 }
 
 // Update task
-function updateTask(taskId, taskElement) {
+function updateTask(e) {
+  e.preventDefault();
+
+  const taskId = parseInt(editTaskId.value);
   const taskIndex = tasks.findIndex((task) => task.id === taskId);
 
   if (taskIndex !== -1) {
-    const newText = taskElement.querySelector(".edit-task-input").value.trim();
-    const newTag = taskElement.querySelector(".edit-task-tag").value;
-    const newDueDate = taskElement.querySelector(".edit-task-due-date").value;
+    const newText = editTaskInput.value.trim();
+    const newTag = editTaskTag.value;
+    const newDueDate = editTaskDueDate.value;
 
     if (newText !== "") {
       tasks[taskIndex].text = newText;
@@ -269,10 +257,16 @@ function updateTask(taskId, taskElement) {
       tasks[taskIndex].dueDate = newDueDate;
       saveTasks();
       renderTasks();
+      closeModal();
     } else {
       alert("A descrição da tarefa não pode estar vazia!");
     }
   }
+}
+
+// Close edit modal
+function closeModal() {
+  editTaskModal.classList.add("hidden");
 }
 
 // Set filter
@@ -311,7 +305,8 @@ function setFilter(filter) {
       "dark:bg-indigo-500",
       "text-white"
     );
-  } else if (filter === "pending") {
+  }
+  else if (filter === "pending") {
     filterPending.classList.remove(
       "bg-gray-300",
       "dark:bg-gray-600",
@@ -323,7 +318,8 @@ function setFilter(filter) {
       "dark:bg-yellow-600",
       "text-white"
     );
-  } else if (filter === "completed") {
+  }
+  else if (filter === "completed") {
     filterCompleted.classList.remove(
       "bg-gray-300",
       "dark:bg-gray-600",
