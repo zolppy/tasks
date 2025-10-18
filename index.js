@@ -113,7 +113,10 @@ function renderTasks() {
 
     // Format date
     const dueDateFormatted = task.dueDate
-      ? new Date(task.dueDate).toLocaleDateString("pt-BR")
+      ? // Using replace to treat date as local timezone, not UTC, avoiding day-off bug.
+        // new Date('2023-10-27') -> Interpreted as UTC
+        // new Date('2023/10/27') -> Interpreted as Local Time
+        new Date(task.dueDate.replace(/-/g, "/")).toLocaleDateString("pt-BR")
       : "Sem data";
 
     taskElement.innerHTML = `
