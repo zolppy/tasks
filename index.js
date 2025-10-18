@@ -210,18 +210,67 @@ function deleteTask(e) {
 
 // Edit task
 function editTask(e) {
-  const taskId = parseInt(
-    e.target.closest(".task-item").getAttribute("data-id")
-  );
+  const taskElement = e.target.closest(".task-item");
+  const taskId = parseInt(taskElement.getAttribute("data-id"));
+  const task = tasks.find((task) => task.id === taskId);
+
+  if (!task) return;
+
+  // Show inline form
+  taskElement.innerHTML = `
+    <div class="editing-task p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+      <input type="text" value="${
+        task.text
+      }" class="edit-task-input w-full mb-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200" />
+      <div class="flex gap-4 mb-2">
+        <select class="edit-task-tag w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+          <option value="Geral" ${
+            task.tag === "Geral" ? "selected" : ""
+          }>Geral</option>
+          <option value="Trabalho" ${
+            task.tag === "Trabalho" ? "selected" : ""
+          }>Trabalho</option>
+          <option value="Educação" ${
+            task.tag === "Educação" ? "selected" : ""
+          }>Educação</option>
+        </select>
+        <input type="date" value="${
+          task.dueDate
+        }" class="edit-task-due-date w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200" />
+      </div>
+      <div class="flex justify-end gap-2">
+        <button class="save-edit-task bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium">Salvar</button>
+        <button class="cancel-edit-task bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium">Cancelar</button>
+      </div>
+    </div>
+  `;
+
+  // Add event listeners for save and cancel buttons
+  taskElement
+    .querySelector(".save-edit-task")
+    .addEventListener("click", () => updateTask(taskId, taskElement));
+  taskElement
+    .querySelector(".cancel-edit-task")
+    .addEventListener("click", renderTasks);
+}
+
+// Update task
+function updateTask(taskId, taskElement) {
   const taskIndex = tasks.findIndex((task) => task.id === taskId);
 
   if (taskIndex !== -1) {
-    const newText = prompt("Editar tarefa:", tasks[taskIndex].text);
+    const newText = taskElement.querySelector(".edit-task-input").value.trim();
+    const newTag = taskElement.querySelector(".edit-task-tag").value;
+    const newDueDate = taskElement.querySelector(".edit-task-due-date").value;
 
-    if (newText !== null && newText.trim() !== "") {
-      tasks[taskIndex].text = newText.trim();
+    if (newText !== "") {
+      tasks[taskIndex].text = newText;
+      tasks[taskIndex].tag = newTag;
+      tasks[taskIndex].dueDate = newDueDate;
       saveTasks();
       renderTasks();
+    } else {
+      alert("A descrição da tarefa não pode estar vazia!");
     }
   }
 }
