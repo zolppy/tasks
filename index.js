@@ -24,6 +24,11 @@ const editTaskTag = document.getElementById("editTaskTag");
 const editTaskDueDate = document.getElementById("editTaskDueDate");
 const cancelEdit = document.getElementById("cancelEdit");
 
+// DOM Elements for Import/Export
+const exportJson = document.getElementById("exportJson");
+const importJson = document.getElementById("importJson");
+const jsonFileInput = document.getElementById("jsonFileInput");
+
 // Initialization
 document.addEventListener("DOMContentLoaded", () => {
   // Set minimum date to today in date fields
@@ -45,6 +50,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Edit modal listeners
   editTaskForm.addEventListener("submit", updateTask);
   cancelEdit.addEventListener("click", closeModal);
+
+  // Import/Export listeners
+  exportJson.addEventListener("click", exportTasks);
+  importJson.addEventListener("click", () => jsonFileInput.click());
+  jsonFileInput.addEventListener("change", importTasks);
 });
 
 // Add new task
@@ -86,8 +96,7 @@ function renderTasks() {
   // Status filter
   if (currentFilter === "pending") {
     filteredTasks = filteredTasks.filter((task) => !task.completed);
-  }
-  else if (currentFilter === "completed") {
+  } else if (currentFilter === "completed") {
     filteredTasks = filteredTasks.filter((task) => task.completed);
   }
 
@@ -305,8 +314,7 @@ function setFilter(filter) {
       "dark:bg-indigo-500",
       "text-white"
     );
-  }
-  else if (filter === "pending") {
+  } else if (filter === "pending") {
     filterPending.classList.remove(
       "bg-gray-300",
       "dark:bg-gray-600",
@@ -318,8 +326,7 @@ function setFilter(filter) {
       "dark:bg-yellow-600",
       "text-white"
     );
-  }
-  else if (filter === "completed") {
+  } else if (filter === "completed") {
     filterCompleted.classList.remove(
       "bg-gray-300",
       "dark:bg-gray-600",
@@ -337,4 +344,71 @@ function setFilter(filter) {
 // Save tasks to localStorage
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+// Export tasks to a JSON file
+function exportTasks() {
+  if (tasks.length === 0) {
+    alert("Nenhuma tarefa para exportar.");
+    return;
+  }
+
+  const tasksJson = JSON.stringify(tasks, null, 2);
+  const blob = new Blob([tasksJson], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "tarefas.json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// Import tasks from a JSON file
+function importTasks(e) {
+  const file = e.target.files[0];
+  if (!file) {
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function (event) {
+    try {
+      const importedTasks = JSON.parse(event.target.result);
+      if (Array.isArray(importedTasks)) {
+        // Basic validation for task structure
+        const isValid = importedTasks.every(
+          (task) =>
+            task.hasOwnProperty("id") &&
+            task.hasOwnProperty("text") &&
+            task.hasOwnProperty("completed")
+        );
+
+        if (isValid) {
+          if (
+            confirm(
+              "Isso substituirá todas as tarefas atuais. Deseja continuar?"
+            )
+          ) {
+            tasks = importedTasks;
+            saveTasks();
+            renderTasks();
+            alert("Tarefas importadas com sucesso!");
+          }
+        } else {
+          alert("Arquivo JSON inválido. A estrutura da tarefa está incorreta.");
+        }
+      } else {
+        alert("Arquivo JSON inválido. O arquivo deve conter um array de tarefas.");
+      }
+    } catch (error) {
+      alert("Erro ao ler o arquivo JSON.");
+      console.error("Error parsing JSON:", error);
+    } finally {
+      // Reset file input to allow importing the same file again
+      jsonFileInput.value = "";
+    }
+  };
+  reader.readAsText(file);
 }

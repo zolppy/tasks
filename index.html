@@ -133,6 +133,30 @@
         </div>
       </div>
 
+      <!-- Import/Export -->
+      <div
+        class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-900/30 p-6 mb-8 transition-colors duration-300"
+      >
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+          Gerenciar Tarefas
+        </h2>
+        <div class="flex flex-wrap gap-4">
+          <button
+            id="exportJson"
+            class="bg-sky-500 hover:bg-sky-600 dark:bg-sky-600 dark:hover:bg-sky-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-300 flex items-center"
+          >
+            <i class="fas fa-file-export mr-2"></i> Exportar para JSON
+          </button>
+          <button
+            id="importJson"
+            class="bg-teal-500 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-300 flex items-center"
+          >
+            <i class="fas fa-file-import mr-2"></i> Importar de JSON
+          </button>
+          <input type="file" id="jsonFileInput" class="hidden" accept=".json" />
+        </div>
+      </div>
+
       <!-- Task List -->
       <div
         class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-900/30 p-6 transition-colors duration-300"
